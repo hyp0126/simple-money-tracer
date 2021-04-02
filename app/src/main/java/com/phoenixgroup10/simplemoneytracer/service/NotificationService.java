@@ -42,7 +42,7 @@ public class NotificationService extends Service {
         final PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         final Notification notification = new Notification.Builder(getApplicationContext())
-                .setSmallIcon(R.drawable.ic_launcher_background)  //TODO: Change new icon
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.notification_text))
                 .setAutoCancel(true)
