@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -16,6 +18,7 @@ import com.phoenixgroup10.simplemoneytracer.activity.CategoryActivity;
 import com.phoenixgroup10.simplemoneytracer.activity.SettingsActivity;
 import com.phoenixgroup10.simplemoneytracer.fragment.ActivityFragment;
 import com.phoenixgroup10.simplemoneytracer.fragment.ReportFragment;
+import com.phoenixgroup10.simplemoneytracer.service.NotificationService;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -83,5 +86,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
+        SharedPreferences.Editor ed = PreferenceManager.getDefaultSharedPreferences(this).edit();
+        ed.putInt("notificationHour", 15);
+        ed.putInt("notificationMin", 05);
+        ed.commit();
+
+        startService(new Intent(getApplicationContext(), NotificationService.class));
+
+        super.onStop();
     }
 }
