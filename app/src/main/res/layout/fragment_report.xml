@@ -11,13 +11,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment"
             android:name="com.phoenixgroup10.simplemoneytracer.fragment.AnimationFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment2"
             android:name="com.phoenixgroup10.simplemoneytracer.fragment.ChartFragment"
             android:layout_width="match_parent"

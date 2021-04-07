@@ -10,6 +10,7 @@ import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -17,12 +18,14 @@ import com.google.android.material.navigation.NavigationView;
 import com.phoenixgroup10.simplemoneytracer.activity.CategoryActivity;
 import com.phoenixgroup10.simplemoneytracer.activity.SettingsActivity;
 import com.phoenixgroup10.simplemoneytracer.fragment.ActivityFragment;
+import com.phoenixgroup10.simplemoneytracer.fragment.AddActivityFragment;
 import com.phoenixgroup10.simplemoneytracer.fragment.ReportFragment;
 import com.phoenixgroup10.simplemoneytracer.service.NotificationService;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private boolean activeReportFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,21 @@ public class MainActivity extends AppCompatActivity {
         setFragment(new ActivityFragment());
     }
 
+    // for ReportFragment land mode
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE
+            || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (activeReportFragment) {
+                setFragment(new ReportFragment());
+            }
+        }
+    }
+
     public void setFragment(Fragment fragment) {
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.replace(R.id.frame, fragment);
@@ -52,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                activeReportFragment = false;
                 Fragment frag = null;
                 int itemId = item.getItemId();
 
@@ -62,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 else if (itemId == R.id.menuReport)
                 {
                     frag = new ReportFragment();
+                    activeReportFragment = true;
                 }
                 else if (itemId == R.id.menuCategory)
                 {
