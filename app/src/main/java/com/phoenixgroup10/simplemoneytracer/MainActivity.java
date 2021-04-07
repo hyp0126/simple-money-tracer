@@ -36,6 +36,14 @@ public class MainActivity extends AppCompatActivity {
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SetNavigationDrawer();
+
+        setFragment(new ActivityFragment());
+    }
+
+    public void setFragment(Fragment fragment) {
+        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        trans.replace(R.id.frame, fragment);
+        trans.commit();
     }
 
     private void SetNavigationDrawer()

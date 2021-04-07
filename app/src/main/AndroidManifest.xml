@@ -15,10 +15,13 @@
             android:enabled="true"
             android:exported="false"></service>
 
-        <activity android:name=".activity.CategoryActivity" />
+        <activity android:name=".activity.CategoryActivity"
+            android:label="@string/title_activity_category"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name=".activity.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
