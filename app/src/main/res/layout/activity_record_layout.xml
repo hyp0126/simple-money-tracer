@@ -12,35 +12,40 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="4sp">
 
             <TextView
                 android:id="@+id/txtAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="17dp"
-                android:layout_marginEnd="106dp"
+                android:layout_below="@+id/txtCategory"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="104dp"
                 android:layout_toStartOf="@+id/btnEditActivity"
-                android:text="Amount" />
+                android:text="Amount"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/txtCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtDate"
                 android:layout_alignStart="@+id/txtDate"
-                android:layout_marginStart="1dp"
-                android:layout_marginTop="9dp"
-                android:text="Category" />
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="121dp"
+                android:layout_marginTop="5dp"
+                android:text="Category"
+                android:textColor="@color/purple_500" />
 
             <TextView
                 android:id="@+id/txtDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="26dp"
-                android:layout_marginEnd="167dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="178dp"
                 android:layout_toStartOf="@+id/btnEditActivity"
                 android:text="Date" />
 
