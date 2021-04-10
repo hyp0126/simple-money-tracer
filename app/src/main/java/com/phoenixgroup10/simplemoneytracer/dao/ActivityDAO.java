@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import com.phoenixgroup10.simplemoneytracer.SimpleMoneyTracerApplication;
 import com.phoenixgroup10.simplemoneytracer.model.ActivityM;
 
+import java.util.Date;
+
 public class ActivityDAO {
     public static final String ACTIVITY_TABLE_NAME = "activity";
     public static final String ACTIVITY_COL1 = "id";
@@ -101,6 +103,38 @@ public class ActivityDAO {
         {
             cursor = db.rawQuery("SELECT * FROM " + ACTIVITY_TABLE_NAME + " " + whereString, null);
         }
+
+        // If any data exist, go to first row
+        if (cursor.getCount() > 0)
+        {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor getCategorySum(long sdate, long edate)
+    {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor;
+
+        String myQuery = "SELECT a.name as name, SUM(b.amount) FROM category a INNER JOIN activity b ON a.id = b.category_id WHERE DATE >= " + sdate + " AND DATE <= " + edate + " GROUP BY a.name;";
+        cursor = db.rawQuery( myQuery, null);
+
+        // If any data exist, go to first row
+        if (cursor.getCount() > 0)
+        {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor getDailySum(long sdate, long edate)
+    {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor;
+
+        String myQuery = "SELECT date as date, SUM(amount) FROM activity WHERE DATE >= " + sdate + " AND DATE <= " + edate + " GROUP BY date;";
+        cursor = db.rawQuery( myQuery, null);
 
         // If any data exist, go to first row
         if (cursor.getCount() > 0)
