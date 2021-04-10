@@ -148,5 +148,37 @@ public class ActivityDAO {
         }
         return cursor;
     }
+
+    public Cursor getCategorySum(long sdate, long edate)
+    {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor;
+
+        String myQuery = "SELECT a.name as name, ABS(SUM(b.amount)) FROM category a INNER JOIN activity b ON a.id = b.category_id WHERE DATE >= " + sdate + " AND DATE <= " + edate + " GROUP BY a.name;";
+        cursor = db.rawQuery( myQuery, null);
+
+        // If any data exist, go to first row
+        if (cursor.getCount() > 0)
+        {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor getDailySum(long sdate, long edate)
+    {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor;
+
+        String myQuery = "SELECT date as date, SUM(amount) FROM activity WHERE DATE >= " + sdate + " AND DATE <= " + edate + " GROUP BY date;";
+        cursor = db.rawQuery( myQuery, null);
+
+        // If any data exist, go to first row
+        if (cursor.getCount() > 0)
+        {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
 }
 

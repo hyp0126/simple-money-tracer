@@ -1,5 +1,6 @@
 package com.phoenixgroup10.simplemoneytracer.fragment;
 
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.phoenixgroup10.simplemoneytracer.R;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.phoenixgroup10.simplemoneytracer.SimpleMoneyTracerApplication;
+import com.phoenixgroup10.simplemoneytracer.dao.ActivityDAO;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +27,8 @@ import com.phoenixgroup10.simplemoneytracer.R;
  * create an instance of this fragment.
  */
 public class ChartFragment extends Fragment {
+    private BarChart chart;
+    private ActivityDAO activityDAO;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,7 +73,48 @@ public class ChartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chart, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_chart, container, false);
+
+        chart = (BarChart) v.findViewById(R.id.barchart);
+        activityDAO = new ActivityDAO((SimpleMoneyTracerApplication) getActivity().getApplication());
+
+        ArrayList dailyList = new ArrayList();
+        ArrayList date = new ArrayList();
+
+        Long sDate = null;
+        Long eDate = null;
+
+        if (getArguments() != null){
+            sDate = getArguments().getLong("sDate");
+            eDate = getArguments().getLong("eDate");
+
+            dailyList = new ArrayList();
+            date = new ArrayList();
+
+            Cursor cursor = activityDAO.getDailySum(sDate, eDate);
+
+            dailyList = new ArrayList();
+            date = new ArrayList();
+            if(cursor.getCount() > 0){
+                if(cursor.moveToFirst()){
+                    int i = 0;
+                    do{
+                        date.add(new Date(cursor.getLong(0)).toString());
+                        dailyList.add(new BarEntry(cursor.getFloat(1), i));
+                        i++;
+                    }while (cursor.moveToNext());
+                }
+                BarDataSet bardataset = new BarDataSet(dailyList, "Date");
+
+                chart.animateY(5000);
+                BarData data = new BarData(date, bardataset);
+                bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+
+                chart.setData(data);
+            }
+        }
+
+        return v;
     }
 }
