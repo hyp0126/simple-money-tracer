@@ -17,8 +17,11 @@ import com.phoenixgroup10.simplemoneytracer.R;
 import com.phoenixgroup10.simplemoneytracer.SimpleMoneyTracerApplication;
 import com.phoenixgroup10.simplemoneytracer.dao.ActivityDAO;
 import com.phoenixgroup10.simplemoneytracer.dao.CategoryDAO;
+import com.phoenixgroup10.simplemoneytracer.helper.FormatUtils;
 import com.phoenixgroup10.simplemoneytracer.model.ActivityM;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ActivityListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -107,7 +110,10 @@ public class ActivityListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ActivityM activityAdapter = mList.get(position);
 
         // Set view text data
-        ((ViewHolder) holder).mTxtAmount.setText(String.valueOf(activityAdapter.getAmount()));
+        double amount = activityAdapter.getAmount();
+        if (amount < 0) amount = -amount;
+
+        ((ViewHolder) holder).mTxtAmount.setText(FormatUtils.getCurrencyString(amount));
         int categoryId = activityAdapter.getCategoryId();
 
         Cursor cursor = categoryDAO.getCategories("WHERE id = " + categoryId);
@@ -117,7 +123,7 @@ public class ActivityListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         };
 
         ((ViewHolder) holder).mTxtCategory.setText(categoryName);
-        ((ViewHolder) holder).mTxtDate.setText(activityAdapter.getDate().toString());
+        ((ViewHolder) holder).mTxtDate.setText(FormatUtils.getDateString(activityAdapter.getDate()));
     }
 
     /**
