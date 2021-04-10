@@ -154,7 +154,7 @@ public class ActivityDAO {
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor;
 
-        String myQuery = "SELECT a.name as name, SUM(b.amount) FROM category a INNER JOIN activity b ON a.id = b.category_id WHERE DATE >= " + sdate + " AND DATE <= " + edate + " GROUP BY a.name;";
+        String myQuery = "SELECT a.name as name, ABS(SUM(b.amount)) FROM category a INNER JOIN activity b ON a.id = b.category_id WHERE DATE >= " + sdate + " AND DATE <= " + edate + " GROUP BY a.name;";
         cursor = db.rawQuery( myQuery, null);
 
         // If any data exist, go to first row
