@@ -176,6 +176,18 @@ public class AddActivityFragment extends Fragment {
 
                 closeKeyboard();
 
+                // Check the monthly target expense
+                if (true) {
+                    Snackbar.make(fLayout,"Over the monthly target expense", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("OK", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //TODO?
+                                }
+                            })
+                            .show();
+                }
+
                 // Go to activity list
                 Fragment frag = new ActivityFragment();
                 FragmentTransaction trans = getActivity().getSupportFragmentManager().beginTransaction();
