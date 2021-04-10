@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import com.phoenixgroup10.simplemoneytracer.SimpleMoneyTracerApplication;
 import com.phoenixgroup10.simplemoneytracer.model.ActivityM;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class ActivityDAO {
     public static final String ACTIVITY_TABLE_NAME = "activity";
     public static final String ACTIVITY_COL1 = "id";
@@ -101,6 +104,42 @@ public class ActivityDAO {
         {
             cursor = db.rawQuery("SELECT * FROM " + ACTIVITY_TABLE_NAME + " " + whereString, null);
         }
+
+        // If any data exist, go to first row
+        if (cursor.getCount() > 0)
+        {
+            cursor.moveToFirst();
+        }
+        return cursor;
+    }
+
+    public Cursor getActivitiesWithDates(Date startDate, Date endDate)
+    {
+        //only use date
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+        calendar.set(year, month, dayOfMonth, 00, 00, 00);
+        startDate = calendar.getTime();
+
+        calendar.setTime(endDate);
+        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        month = calendar.get(Calendar.MONTH);
+        year = calendar.get(Calendar.YEAR);
+        calendar.set(year, month, dayOfMonth, 23, 59, 59);
+        endDate = calendar.getTime();
+
+        long startEpochDate = startDate.getTime();
+        long endEpochDate = endDate.getTime();
+        String whereString = "WHERE " + ACTIVITY_COL4 + " >= " + startEpochDate + " AND "
+                + ACTIVITY_COL4 + " <= " + endEpochDate;
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery("SELECT * FROM " + ACTIVITY_TABLE_NAME + " " + whereString, null);
 
         // If any data exist, go to first row
         if (cursor.getCount() > 0)

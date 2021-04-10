@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.InputFilter;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -26,6 +28,8 @@ import com.phoenixgroup10.simplemoneytracer.R;
 import com.phoenixgroup10.simplemoneytracer.SimpleMoneyTracerApplication;
 import com.phoenixgroup10.simplemoneytracer.dao.ActivityDAO;
 import com.phoenixgroup10.simplemoneytracer.dao.CategoryDAO;
+import com.phoenixgroup10.simplemoneytracer.helper.CurrencyFormatInputFilter;
+import com.phoenixgroup10.simplemoneytracer.helper.FormatUtils;
 import com.phoenixgroup10.simplemoneytracer.model.ActivityM;
 import com.phoenixgroup10.simplemoneytracer.model.Category;
 
@@ -50,6 +54,7 @@ public class AddActivityFragment extends Fragment {
     private Button mBtnSave;
     private Button mBtnDelete;
     private Button mBtnCancel;
+    private CheckBox mChkIncome;
 
     // Member variables
     private int mActivityId;
@@ -72,7 +77,11 @@ public class AddActivityFragment extends Fragment {
         fLayout = (FrameLayout) v.findViewById(R.id.addActivityLayout);
         // Set UI instance variables
         mEdtAmount = (EditText)v.findViewById(R.id.edtAmount);
+        mEdtAmount.setFilters(new InputFilter[] {new CurrencyFormatInputFilter()});
+
         mEdtDate = (EditText)v.findViewById(R.id.edtDate);
+
+        mChkIncome = (CheckBox)v.findViewById(R.id.chkIncome);
 
         mBtnSave = (Button)v.findViewById(R.id.btnSave);
         mBtnDelete = (Button)v.findViewById(R.id.btnDelete);
@@ -117,24 +126,29 @@ public class AddActivityFragment extends Fragment {
                 mDatePicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        Calendar calendar = Calendar.getInstance();;
-                        mEdtDate.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
-
+                        Calendar calendar = Calendar.getInstance();
                         calendar.set(year, month, dayOfMonth);
                         mDate = calendar.getTime();
+                        mEdtDate.setText(FormatUtils.getDateString(mDate));
                     }
                 }, currentYear, currentMonth, currentDay);
                 mDatePicker.show();
             }
         });
 
+
+
         // Save button: Save current activity data, and go back to activities list (previous activity)
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                double amount = Double.parseDouble(mEdtAmount.getText().toString());
+                if (!mChkIncome.isChecked()) {
+                    amount = -amount;
+                }
                 // Save activity data
-                ActivityM activity = new ActivityM(mActivityId, Double.parseDouble(mEdtAmount.getText().toString()),
+                ActivityM activity = new ActivityM(mActivityId, amount,
                         mCategoryId,
                         mDate);
 
@@ -287,11 +301,20 @@ public class AddActivityFragment extends Fragment {
             {
                 // Set found activity data to View UI
                 double amount = cursor.getDouble(1);
-                mEdtAmount.setText(Double.toString(amount));
+                if (amount < 0) {
+                    amount = -amount;
+                    mChkIncome.setChecked(false);
+                } else {
+                    mChkIncome.setChecked(true);
+                }
+
+                //mEdtAmount.setText(FormatUtil.getCurrencyString(amount));
+                mEdtAmount.setText(String.valueOf(amount));
+
                 mCategoryId = cursor.getInt(2);
                 Date date = new Date(cursor.getLong(3));
-                mEdtDate.setText(date.toString());
                 mDate = date;
+                mEdtDate.setText(FormatUtils.getDateString(mDate));
 
                 for (int position = 0; position < categoryListId.size(); position++)
                 {

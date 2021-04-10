@@ -1,5 +1,6 @@
 package com.phoenixgroup10.simplemoneytracer.fragment;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -9,9 +10,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,12 +23,16 @@ import com.phoenixgroup10.simplemoneytracer.MainActivity;
 import com.phoenixgroup10.simplemoneytracer.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import com.phoenixgroup10.simplemoneytracer.SimpleMoneyTracerApplication;
 import com.phoenixgroup10.simplemoneytracer.adapter.ActivityListAdapter;
 import com.phoenixgroup10.simplemoneytracer.dao.ActivityDAO;
+import com.phoenixgroup10.simplemoneytracer.helper.FormatUtils;
 import com.phoenixgroup10.simplemoneytracer.model.ActivityM;
 import com.phoenixgroup10.simplemoneytracer.model.Category;
 
@@ -32,12 +40,21 @@ import com.phoenixgroup10.simplemoneytracer.model.Category;
 public class ActivityFragment extends Fragment {
 
     FloatingActionButton mFabAdd;
+    private EditText mEdtStartDate;
+    private EditText mEdtEndDate;
+
     // Recycler View variables
     private RecyclerView mRecyclerView;
     private List<ActivityM> mList = new ArrayList<>();
     private ActivityListAdapter mAdapter;
 
+    private DatePickerDialog mDatePicker;
+
     private ActivityDAO activityDAO;
+
+    // Member variables
+    private Date mStartDate;
+    private Date mEndDate;
 
     public ActivityFragment() {
         // Required empty public constructor
@@ -51,8 +68,17 @@ public class ActivityFragment extends Fragment {
 
         mRecyclerView = (RecyclerView)v.findViewById(R.id.recyclerViewActivities);
         mFabAdd = v.findViewById(R.id.fabAdd);
+        mEdtStartDate = (EditText)v.findViewById(R.id.edtStartDate);
+        mEdtEndDate = (EditText)v.findViewById(R.id.edtEndDate);
 
         activityDAO = new ActivityDAO((SimpleMoneyTracerApplication) getActivity().getApplication());
+
+        Calendar cal = Calendar.getInstance();
+        mEndDate = cal.getTime();
+        mEdtEndDate.setText(FormatUtils.getDateString(mEndDate));
+        cal.add(Calendar.DAY_OF_MONTH, -30);
+        mStartDate = cal.getTime();
+        mEdtStartDate.setText(FormatUtils.getDateString(mStartDate));
 
         // Get activities list
         getActivities();
@@ -71,6 +97,60 @@ public class ActivityFragment extends Fragment {
             }
         });
 
+        // If click Date text input window, call DatePicker
+        mEdtStartDate.setInputType(InputType.TYPE_NULL);
+        mEdtStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get Current Date
+                final Calendar cal = Calendar.getInstance();
+                int currentDay = cal.get(Calendar.DAY_OF_MONTH);
+                int currentMonth = cal.get(Calendar.MONTH);
+                int currentYear = cal.get(Calendar.YEAR);
+
+                // Call DatePicker for DOB input
+                mDatePicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(year, month, dayOfMonth);
+                        mStartDate = calendar.getTime();
+                        mEdtStartDate.setText(FormatUtils.getDateString(mStartDate));
+                        getActivities();
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }, currentYear, currentMonth, currentDay);
+                mDatePicker.show();
+            }
+        });
+
+        // If click Date text input window, call DatePicker
+        mEdtEndDate.setInputType(InputType.TYPE_NULL);
+        mEdtEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get Current Date
+                final Calendar cal = Calendar.getInstance();
+                int currentDay = cal.get(Calendar.DAY_OF_MONTH);
+                int currentMonth = cal.get(Calendar.MONTH);
+                int currentYear = cal.get(Calendar.YEAR);
+
+                // Call DatePicker for DOB input
+                mDatePicker = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(year, month, dayOfMonth);
+                        mEndDate = calendar.getTime();
+                        mEdtStartDate.setText(FormatUtils.getDateString(mEndDate));
+                        getActivities();
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }, currentYear, currentMonth, currentDay);
+                mDatePicker.show();
+            }
+        });
+
         return v;
     }
 
@@ -83,7 +163,8 @@ public class ActivityFragment extends Fragment {
         Cursor cursor;
 
         // Get cursor for getting a list
-        cursor = activityDAO.getActivities("");
+        //cursor = activityDAO.getActivities("");
+        cursor = activityDAO.getActivitiesWithDates(mStartDate, mEndDate);
 
         ActivityM activityObj = new ActivityM();
         mList.clear();
@@ -108,6 +189,13 @@ public class ActivityFragment extends Fragment {
                 } while (cursor.moveToNext());
             }
         }
+
+        Collections.sort(mList, new Comparator<ActivityM>(){
+            public int compare(ActivityM obj1, ActivityM obj2) {
+                // Descending order
+                return (int)(obj2.getDateEpoch()/60000 - obj1.getDateEpoch()/60000);
+            }
+        });
     }
 
     /**
