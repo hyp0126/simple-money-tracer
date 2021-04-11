@@ -12,19 +12,20 @@
     <string name="title_activity_category">Category</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <string name="title_notification">Notification</string>
+    <string name="title_appearance">Appearance</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
+    <string name="notification_midday">AM / PM</string>
+    <string name="notification_time">Set time</string>
+    <string name="target_expense">Target Expense </string>
+    <string name="set_dark_theme">Dark theme</string>
+    <string name="title_target">Target Expense</string>
+    <string name="target_amount">Target expense per day(CAD$)</string>
     <string name="reply_title">Default reply action</string>
 
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="dark_on">Dark theme on</string>
+    <string name="dark_off">Dark theme off</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
@@ -44,4 +45,8 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
 
+<!--    category-->
+    <string name="add_new_category">Add a new cateory</string>
+    <string name="update_category">Update</string>
+    <string name="cancel_category">Cancel</string>
 </resources>

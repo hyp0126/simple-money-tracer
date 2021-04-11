@@ -8,4 +8,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="teal_bright">#BAFBF5</color>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="category_view">#000814</color>
+    <color name="toolbar_bg">#001d3d</color>
+    <color name="cyan_100">#a8dadc</color>
+    <color name="yellow_dark">#ffc300</color>
+    <color name="yellow">#ffd60a</color>
+    <color name="red_230">#e63946</color>
+    <color name="nav_bg">#E6EDED</color>
 </resources>

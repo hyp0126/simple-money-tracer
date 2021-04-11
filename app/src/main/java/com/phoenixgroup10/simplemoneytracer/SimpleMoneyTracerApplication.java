@@ -31,7 +31,8 @@ public class SimpleMoneyTracerApplication extends Application {
 
             @Override
             public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-                // No-op
+                db.execSQL("DROP TABLE IF EXISTS " + CategoryDAO.CATEGORY_TABLE_NAME);
+                onCreate(db);
             }
         };
         super.onCreate();

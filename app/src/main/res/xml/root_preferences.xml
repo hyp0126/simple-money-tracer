@@ -1,35 +1,37 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory app:title="@string/title_notification">
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
+        <ListPreference
+            app:defaultValue="10:00"
+            app:entries="@array/time_entries"
+            app:entryValues="@array/time_entries"
+            app:key="notiTime"
+            app:title="@string/notification_time"
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
+            app:defaultValue="PM"
+            app:entries="@array/midday_entries"
+            app:entryValues="@array/midday_values"
+            app:key="timeMidday"
+            app:title="@string/notification_midday"
             app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="targetExpense"
+            app:singleLineTitle="true"
+            app:title="@string/target_amount"
+            app:useSimpleSummaryProvider="true"/>
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
-
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
-
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
-
+    <PreferenceCategory app:title="@string/title_appearance">
+        <SwitchPreference
+            app:key="setDarkOn"
+            app:summaryOff="@string/dark_off"
+            app:summaryOn="@string/dark_on"
+            app:title="@string/set_dark_theme"  />
     </PreferenceCategory>
 
 </PreferenceScreen>
