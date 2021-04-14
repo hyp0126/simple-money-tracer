@@ -25,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.phoenixgroup10.simplemoneytracer.R;
 import com.phoenixgroup10.simplemoneytracer.SimpleMoneyTracerApplication;
 import com.phoenixgroup10.simplemoneytracer.dao.ActivityDAO;
+import com.phoenixgroup10.simplemoneytracer.helper.FormatUtils;
 import com.phoenixgroup10.simplemoneytracer.model.ActivityM;
 
 import java.util.ArrayList;
@@ -66,6 +67,11 @@ public class ReportFragment extends Fragment {
 
         btnDaily = (Button)v.findViewById(R.id.btnDaily);
       //  btnMonthly = (Button)v.findViewById(R.id.btnMonthly);
+        Calendar cal = Calendar.getInstance();
+        sDate = cal.getTime();
+        eDate = cal.getTime();
+        startDate.setText(FormatUtils.getDateString(sDate));
+        endDate.setText(FormatUtils.getDateString(sDate));
 
         activityDAO = new ActivityDAO((SimpleMoneyTracerApplication) getActivity().getApplication());
         PreferenceManager.setDefaultValues(getContext(), R.xml.root_preferences, false);
@@ -194,6 +200,8 @@ public class ReportFragment extends Fragment {
         if (sDate != null && eDate != null){
             sDate = new Date(sharedPref.getLong("sDate",0));
             eDate = new Date(sharedPref.getLong("eDate", 0));
+            startDate.setText(FormatUtils.getDateString(sDate));
+            endDate.setText(FormatUtils.getDateString(eDate));
             dataTransfer();
         }
 

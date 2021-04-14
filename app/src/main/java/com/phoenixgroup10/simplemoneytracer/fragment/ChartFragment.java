@@ -17,6 +17,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.phoenixgroup10.simplemoneytracer.SimpleMoneyTracerApplication;
 import com.phoenixgroup10.simplemoneytracer.dao.ActivityDAO;
+import com.phoenixgroup10.simplemoneytracer.helper.FormatUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -100,7 +101,9 @@ public class ChartFragment extends Fragment {
                 if(cursor.moveToFirst()){
                     int i = 0;
                     do{
-                        date.add(new Date(cursor.getLong(0)).toString());
+                        Date useDate = new Date(cursor.getLong(0));
+                        date.add(FormatUtils.getDateString(useDate));
+                       // date.add(new Date(cursor.getLong(0)).toString());
                         dailyList.add(new BarEntry(cursor.getFloat(1), i));
                         i++;
                     }while (cursor.moveToNext());
