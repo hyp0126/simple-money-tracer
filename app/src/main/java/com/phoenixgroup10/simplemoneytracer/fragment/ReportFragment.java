@@ -191,7 +191,7 @@ public class ReportFragment extends Fragment {
         ed.putLong("eDate", eDate.getTime());
         ed.commit();
 
-        dataTransfer();
+        //dataTransfer();
         super.onPause();
     }
 
