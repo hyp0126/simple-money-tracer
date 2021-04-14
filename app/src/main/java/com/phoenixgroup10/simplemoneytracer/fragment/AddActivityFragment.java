@@ -1,11 +1,13 @@
 package com.phoenixgroup10.simplemoneytracer.fragment;
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 
 import android.text.InputFilter;
 import android.text.InputType;
@@ -64,6 +66,8 @@ public class AddActivityFragment extends Fragment {
     private ActivityDAO activityDAO;
     private CategoryDAO categoryDAO;
 
+    private SharedPreferences sharedPref;
+
     public AddActivityFragment() {
         // Required empty public constructor
     }
@@ -89,6 +93,8 @@ public class AddActivityFragment extends Fragment {
 
         activityDAO = new ActivityDAO((SimpleMoneyTracerApplication) getActivity().getApplication());
         categoryDAO = new CategoryDAO((SimpleMoneyTracerApplication) getActivity().getApplication());
+
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         getCategoryList();
 
@@ -177,12 +183,27 @@ public class AddActivityFragment extends Fragment {
                 closeKeyboard();
 
                 // Check the monthly target expense
-                if (true) {
-                    Snackbar.make(fLayout,"Over the monthly target expense", Snackbar.LENGTH_INDEFINITE)
+                // Get Current Date
+                final Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                Date sDate = cal.getTime();
+                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+                Date eDate = cal.getTime();
+                double monthlyAmount = activityDAO.getSumWithDates(sDate, eDate);
+                double targetExpense = Double.MAX_VALUE;
+                try {
+                    targetExpense = Double.parseDouble(sharedPref.getString("targetExpense", "0"));
+                }
+                catch (Exception ex) {
+                    //parse error
+                }
+
+                if (monthlyAmount > targetExpense) {
+                    Snackbar.make(fLayout,"Over the monthly target expense " + targetExpense, Snackbar.LENGTH_INDEFINITE)
                             .setAction("OK", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    //TODO?
+
                                 }
                             })
                             .show();
