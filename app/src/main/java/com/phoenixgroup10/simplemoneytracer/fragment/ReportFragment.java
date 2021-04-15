@@ -48,6 +48,7 @@ public class ReportFragment extends Fragment {
     private ArrayList dailyList;
     private ArrayList date;
     private SharedPreferences sharedPref;
+    private boolean darkState;
 
     private ActivityDAO activityDAO;
 
@@ -60,6 +61,15 @@ public class ReportFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        PreferenceManager.setDefaultValues(getContext(), R.xml.root_preferences, false);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        darkState = sharedPref.getBoolean("setDarkOn", false);
+        if(darkState)
+            getActivity().setTheme((R.style.darkTheme));
+        else
+            getActivity().setTheme(R.style.Theme_SimpleMoneyTracer);
+
         View v = inflater.inflate(R.layout.fragment_report, container, false);
 
         startDate = (EditText)v.findViewById(R.id.editStartDate);
@@ -74,8 +84,6 @@ public class ReportFragment extends Fragment {
         endDate.setText(FormatUtils.getDateString(sDate));
 
         activityDAO = new ActivityDAO((SimpleMoneyTracerApplication) getActivity().getApplication());
-        PreferenceManager.setDefaultValues(getContext(), R.xml.root_preferences, false);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         startDate.setInputType(InputType.TYPE_NULL);
         startDate.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +205,10 @@ public class ReportFragment extends Fragment {
 
     @Override
     public void onResume() {
+        super.onResume();
+
+        darkState = sharedPref.getBoolean("setDarkOn", false);
+
         if (sDate != null && eDate != null){
             sDate = new Date(sharedPref.getLong("sDate",0));
             eDate = new Date(sharedPref.getLong("eDate", 0));
@@ -204,8 +216,6 @@ public class ReportFragment extends Fragment {
             endDate.setText(FormatUtils.getDateString(eDate));
             dataTransfer();
         }
-
-        super.onResume();
     }
 
     private void dataTransfer() {
