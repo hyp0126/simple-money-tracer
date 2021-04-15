@@ -1,10 +1,13 @@
 package com.phoenixgroup10.simplemoneytracer.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +32,9 @@ import java.util.ArrayList;
 public class AnimationFragment extends Fragment {
     private PieChart pieChart;
     private ActivityDAO activityDAO;
+    private SharedPreferences sharedPref;
+    private boolean darkState;
+    private int pieColor;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,7 +81,21 @@ public class AnimationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        PreferenceManager.setDefaultValues(getContext(), R.xml.root_preferences, false);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        darkState = sharedPref.getBoolean("setDarkOn", false);
+        if(darkState) {
+            getActivity().setTheme((R.style.darkTheme));
+            pieColor = Color.WHITE;
+        }
+        else {
+            getActivity().setTheme(R.style.Theme_SimpleMoneyTracer);
+            pieColor = Color.BLACK;
+        }
+
         View v = inflater.inflate(R.layout.fragment_animation, container, false);
+
         pieChart = (PieChart) v.findViewById(R.id.piechart);
         activityDAO = new ActivityDAO((SimpleMoneyTracerApplication) getActivity().getApplication());
 
@@ -104,6 +124,7 @@ public class AnimationFragment extends Fragment {
                 PieData pieData = new PieData(category, pieDataSet);
                 pieChart.setData(pieData);
                 pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+                pieChart.getLegend().setTextColor(pieColor);
                 pieChart.animateXY(5000,5000);
             }
 

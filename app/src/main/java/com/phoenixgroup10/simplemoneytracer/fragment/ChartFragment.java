@@ -1,10 +1,14 @@
 package com.phoenixgroup10.simplemoneytracer.fragment;
 
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
+import android.util.EventLogTags;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +34,9 @@ import java.util.Date;
 public class ChartFragment extends Fragment {
     private BarChart chart;
     private ActivityDAO activityDAO;
+    private SharedPreferences sharedPref;
+    private boolean darkState;
+    private int chartColor;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,6 +82,19 @@ public class ChartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        PreferenceManager.setDefaultValues(getContext(), R.xml.root_preferences, false);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        darkState = sharedPref.getBoolean("setDarkOn", false);
+        if(darkState) {
+            getActivity().setTheme((R.style.darkTheme));
+            chartColor = Color.WHITE;
+        }
+        else {
+            getActivity().setTheme(R.style.Theme_SimpleMoneyTracer);
+            chartColor = Color.BLACK;
+        }
+
         View v = inflater.inflate(R.layout.fragment_chart, container, false);
 
         chart = (BarChart) v.findViewById(R.id.barchart);
@@ -113,6 +133,11 @@ public class ChartFragment extends Fragment {
                 chart.animateY(5000);
                 BarData data = new BarData(date, bardataset);
                 bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
+                chart.getAxisLeft().setTextColor(chartColor);
+                chart.getAxisRight().setTextColor(chartColor);
+                chart.getXAxis().setTextColor(chartColor);
+                chart.getLegend().setTextColor(chartColor);
+                chart.setDescriptionColor(chartColor);
 
                 chart.setData(data);
             }
