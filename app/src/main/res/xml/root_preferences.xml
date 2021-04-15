@@ -3,15 +3,13 @@
     <PreferenceCategory app:title="@string/title_notification">
 
         <ListPreference
-            app:defaultValue="10:00"
             app:entries="@array/time_entries"
-            app:entryValues="@array/time_entries"
+            app:entryValues="@array/time_values"
             app:key="notiTime"
             app:title="@string/notification_time"
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
-            app:defaultValue="PM"
             app:entries="@array/midday_entries"
             app:entryValues="@array/midday_values"
             app:key="timeMidday"

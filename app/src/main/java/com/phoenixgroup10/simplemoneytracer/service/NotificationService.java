@@ -55,9 +55,19 @@ public class NotificationService extends Service {
         // Set Notification DateTime
         SharedPreferences.Editor ed = sharedPref.edit();
 
+        String notiTime = sharedPref.getString("notiTime", "10");
+        String[] notiStr = notiTime.split(":");
+        notiTime = notiStr[0];
+        int notiHour = Integer.parseInt(notiTime);
+
+        String NotiTimeMidday = sharedPref.getString("timeMidday", "2");
+        if (NotiTimeMidday.equals("2") || NotiTimeMidday.equals("PM")) {
+            notiHour += 12;
+        }
+
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, sharedPref.getInt("notificationHour", 0));
-        calendar.set(Calendar.MINUTE, sharedPref.getInt("notificationMin", 0));
+        calendar.set(Calendar.HOUR_OF_DAY, notiHour);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.add(Calendar.DATE, 1); // tomorrow
         //calendar.add(Calendar.DATE, -1); // for test
 
@@ -88,4 +98,8 @@ public class NotificationService extends Service {
         super.onCreate();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }

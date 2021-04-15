@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private boolean activeReportFragment;
+    private Intent mServiceIntent = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,14 +120,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
-        SharedPreferences.Editor ed = PreferenceManager.getDefaultSharedPreferences(this).edit();
-        ed.putInt("notificationHour", 15);
-        ed.putInt("notificationMin", 05);
-        ed.commit();
-
-        startService(new Intent(getApplicationContext(), NotificationService.class));
-
+        mServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
+        startService(mServiceIntent);
         super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        // If notification service is active, turn off
+        if (mServiceIntent != null) {
+            stopService(mServiceIntent);
+            mServiceIntent = null;
+        }
+        super.onStart();
     }
 }
