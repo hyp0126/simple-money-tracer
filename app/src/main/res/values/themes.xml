@@ -46,4 +46,10 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <style name="ListButtonStyle" parent="@style/Widget.AppCompat.Button">
+        <item name="android:textSize">24sp</item>
+        <item name="backgroundTint">@color/yellow_dark</item>
+        <item name="android:background">@drawable/rounded_button</item>
+    </style>
 </resources>
