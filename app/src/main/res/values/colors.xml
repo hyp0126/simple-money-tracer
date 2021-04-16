@@ -17,5 +17,6 @@
     <color name="yellow_dark">#ffc300</color>
     <color name="yellow">#ffd60a</color>
     <color name="red_230">#e63946</color>
-    <color name="nav_bg">#E6EDED</color>
+    <color name="edit_bg">#D6D5BF</color>
+    <color name="dk_text">#C3C3C0</color>
 </resources>

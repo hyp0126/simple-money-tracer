@@ -3,6 +3,7 @@ package com.phoenixgroup10.simplemoneytracer.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,24 +38,39 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
     TextView categoryAdd, categoryUpdate, categoryCancel;
     EditText etEnterName;
     int position;
+    int themeID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        themeID = Common.getThemeId(this, "category");
+        setTheme(themeID);
         super.onCreate(savedInstanceState);
         application = ((SimpleMoneyTracerApplication) getApplication());
         categoryDAO= new CategoryDAO(application);
         setContentView(R.layout.activity_category);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setBackgroundDrawable(new ColorDrawable((Color.parseColor("#001d3d"))));
-        }
         categoryListView = findViewById(R.id.category_item);
         etEnterName = findViewById(R.id.category_enter_name);
         categoryAdd = findViewById(R.id.category_add);
         categoryUpdate = findViewById(R.id.category_update);
         categoryCancel = findViewById(R.id.category_cancel);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            if(themeID == R.style.Category_darkTheme) {
+                actionBar.setBackgroundDrawable(new ColorDrawable((Color.parseColor("#636161"))));
+                categoryAdd.setBackgroundColor(Color.parseColor("#dadada"));
+                categoryAdd.setTextColor(Color.parseColor("#000000"));
+                categoryUpdate.setBackgroundColor(Color.parseColor("#dadada"));
+                categoryUpdate.setTextColor(Color.parseColor("#000000"));
+                categoryCancel.setBackgroundColor(Color.parseColor("#dadada"));
+                categoryCancel.setTextColor(Color.parseColor("#000000"));
+            }
+            else {
+                actionBar.setBackgroundDrawable(new ColorDrawable((Color.parseColor("#001d3d"))));
+            }
+        }
         categoryListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         categoryListView.setLayoutManager(layoutManager);
@@ -122,6 +138,7 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
     }
 
     private void toggleButton(int val){
+
         if(val == Common.ADD_VISIBLE){
             categoryAdd.setVisibility(View.VISIBLE);
             categoryUpdate.setVisibility(View.INVISIBLE);

@@ -1,6 +1,9 @@
 package com.phoenixgroup10.simplemoneytracer;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -39,5 +42,17 @@ public class Common {
         //calendar.set(year, month, dayOfMonth, 23, 59, 59);
         Date date = calendar.getTime();
         return date.getTime();
+    }
+
+    public static int getThemeId(Context context, String from) {
+
+        PreferenceManager.setDefaultValues(context, R.xml.root_preferences, false);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        if(sharedPref.getBoolean("setDarkOn", false))
+            return (from == "category")? R.style.Category_darkTheme : R.style.darkTheme;
+        else
+            return (sharedPref.getBoolean("setDarkOn", false))
+                ? R.style.darkTheme
+                : R.style.Theme_SimpleMoneyTracer;
     }
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.phoenixgroup10.simplemoneytracer.Common;
 import com.phoenixgroup10.simplemoneytracer.SimpleMoneyTracerApplication;
 import com.phoenixgroup10.simplemoneytracer.dao.ActivityDAO;
 import com.phoenixgroup10.simplemoneytracer.dao.CategoryDAO;
@@ -40,7 +41,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public CategoryAdapter.CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         view = inflater.from(parent.getContext()).inflate(R.layout.activity_category_record, parent, false);
+
         CategoryViewHolder cvViewHolder = new CategoryViewHolder(view);
+
+        int themeID = Common.getThemeId(this.context, "category");
+        if(themeID == R.style.Category_darkTheme) {
+            cvViewHolder.itemName.setTextColor(Color.parseColor("#C3C3C0"));
+        }
         return cvViewHolder;
     }
     @Override
