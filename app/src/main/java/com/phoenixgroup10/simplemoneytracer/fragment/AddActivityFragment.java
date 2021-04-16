@@ -119,6 +119,8 @@ public class AddActivityFragment extends Fragment {
 
         // If click Date text input window, call DatePicker
         mEdtDate.setInputType(InputType.TYPE_NULL);
+        Calendar cal = Calendar.getInstance();
+        mEdtDate.setText(FormatUtils.getDateString(cal.getTime()));
         mEdtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
