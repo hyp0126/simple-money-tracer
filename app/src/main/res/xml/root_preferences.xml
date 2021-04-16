@@ -24,11 +24,11 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/unit_price">
+    <PreferenceCategory app:title="@string/currency">
         <EditTextPreference
-            app:key="unitPrice"
+            app:key="currency"
             app:singleLineTitle="true"
-            app:title="@string/unit_price"
+            app:title="@string/currency"
             app:defaultValue="$"
             app:useSimpleSummaryProvider="true"/>
     </PreferenceCategory>

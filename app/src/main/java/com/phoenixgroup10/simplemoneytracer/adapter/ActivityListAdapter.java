@@ -30,9 +30,11 @@ public class ActivityListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private onClickListener onClickListener;
 
     private CategoryDAO categoryDAO;
+    private Context mContext;
 
     public ActivityListAdapter(List<ActivityM> activities, Context context) {
         super();
+        mContext = context;
         mList = activities;
         SimpleMoneyTracerApplication application;
         categoryDAO = new CategoryDAO((SimpleMoneyTracerApplication) context.getApplicationContext());
@@ -113,7 +115,7 @@ public class ActivityListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         double amount = activityAdapter.getAmount();
         if (amount < 0) amount = -amount;
 
-        ((ViewHolder) holder).mTxtAmount.setText(FormatUtils.getCurrencyString(amount));
+        ((ViewHolder) holder).mTxtAmount.setText(FormatUtils.getCurrencyString(mContext, amount));
         int categoryId = activityAdapter.getCategoryId();
 
         Cursor cursor = categoryDAO.getCategories("WHERE id = " + categoryId);

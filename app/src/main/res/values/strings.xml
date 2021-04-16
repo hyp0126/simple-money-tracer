@@ -14,7 +14,7 @@
     <!-- Preference Titles -->
     <string name="title_notification">Notification</string>
     <string name="title_appearance">Appearance</string>
-    <string name="unit_price">Unit Price</string>
+    <string name="currency">Currency</string>
 
     <!-- Messages Preferences -->
     <string name="notification_midday">AM / PM</string>

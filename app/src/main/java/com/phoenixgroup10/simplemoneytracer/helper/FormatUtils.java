@@ -1,7 +1,13 @@
 package com.phoenixgroup10.simplemoneytracer.helper;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.InputFilter;
 import android.text.Spanned;
+
+import androidx.preference.PreferenceManager;
+
+import com.phoenixgroup10.simplemoneytracer.R;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -19,7 +25,11 @@ public class FormatUtils {
         return "" + currentYear + "-" + (currentMonth + 1) + "-" + currentDay;
     }
 
-    public static String getCurrencyString(double currency) {
-        return "$" + String.valueOf(currency);
+    public static String getCurrencyString(Context context, double currency) {
+        PreferenceManager.setDefaultValues(context, R.xml.root_preferences, false);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        String currencyUnit = sharedPref.getString("currency", "$");
+
+        return currencyUnit + String.valueOf(currency);
     }
 }
