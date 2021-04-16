@@ -33,8 +33,6 @@ public class AnimationFragment extends Fragment {
     private PieChart pieChart;
     private ActivityDAO activityDAO;
     private SharedPreferences sharedPref;
-    private boolean darkState;
-    private int pieColor;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,16 +82,6 @@ public class AnimationFragment extends Fragment {
         PreferenceManager.setDefaultValues(getContext(), R.xml.root_preferences, false);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        darkState = sharedPref.getBoolean("setDarkOn", false);
-        if(darkState) {
-            getActivity().setTheme((R.style.darkTheme));
-            pieColor = Color.WHITE;
-        }
-        else {
-            getActivity().setTheme(R.style.Theme_SimpleMoneyTracer);
-            pieColor = Color.BLACK;
-        }
-
         View v = inflater.inflate(R.layout.fragment_animation, container, false);
 
         pieChart = (PieChart) v.findViewById(R.id.piechart);
@@ -124,7 +112,6 @@ public class AnimationFragment extends Fragment {
                 PieData pieData = new PieData(category, pieDataSet);
                 pieChart.setData(pieData);
                 pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-                pieChart.getLegend().setTextColor(pieColor);
                 pieChart.animateXY(5000,5000);
             }
 
