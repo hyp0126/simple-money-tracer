@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +36,7 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
     CategoryDAO categoryDAO;
     RecyclerView categoryListView;
     CategoryAdapter categoryAdapter;
-    TextView categoryAdd, categoryUpdate, categoryCancel;
+    Button categoryAdd, categoryUpdate, categoryCancel;
     EditText etEnterName;
     int position;
     int themeID;
@@ -50,9 +51,9 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
 
         categoryListView = findViewById(R.id.category_item);
         etEnterName = findViewById(R.id.category_enter_name);
-        categoryAdd = findViewById(R.id.category_add);
-        categoryUpdate = findViewById(R.id.category_update);
-        categoryCancel = findViewById(R.id.category_cancel);
+        categoryAdd = findViewById(R.id.btn_add);
+        categoryUpdate = findViewById(R.id.btn_update);
+        categoryCancel = findViewById(R.id.btn_cancel);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -82,7 +83,7 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
     public void onClick(View view) {
         String newName = etEnterName.getText().toString();
         switch (view.getId()) {
-            case R.id.category_add: {
+            case R.id.btn_add: {
                 if(newName.equals("")){
                     Snackbar.make(view, "Category Name is Required", Snackbar.LENGTH_LONG).show();
                     etEnterName.setFocusable(true);
@@ -94,7 +95,7 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
                 }
             }
             break;
-            case R.id.category_update: {
+            case R.id.btn_update: {
                 if(isDuplicatedName(newName)){
                     Snackbar.make(view, "Can not update", Snackbar.LENGTH_LONG).show();
                     Toast.makeText(application, "Duplicated category name!", Toast.LENGTH_SHORT).show();
@@ -111,7 +112,7 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
                 }
             }
             break;
-            case R.id.category_cancel: {
+            case R.id.btn_cancel: {
                 etEnterName.setText("");
                 toggleButton(Common.ADD_VISIBLE);
                 hideInputForm(view);
@@ -167,10 +168,14 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
     private boolean insertCategory(String name) {
         Category c = new Category();
         c.setName(name);
-        boolean result = categoryDAO.insertCategory(c);
-        models.add(c);
-        categoryAdapter.notifyDataSetChanged();
-        return result;
+        int newId = (int)categoryDAO.insertCategory(c);
+        if(newId != -1){
+            c.setId(newId);
+            models.add(c);
+            categoryAdapter.notifyDataSetChanged();
+            return true;
+        }
+        return false;
     }
 
     private boolean udpateCategory(Category c) {

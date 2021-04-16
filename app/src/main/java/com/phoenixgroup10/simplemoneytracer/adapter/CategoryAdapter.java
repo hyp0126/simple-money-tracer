@@ -51,13 +51,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         if (model.getName() != null) {
             holder.itemName.setText(model.getName());
         }
-       /* holder.itemName.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                holder.itemName.setTextColor(Color.parseColor("#00aaff"));
-                holder.removeImg.setBackgroundResource(R.drawable.day_picker_item_background);
-            }
-        });*/
         holder.removeImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

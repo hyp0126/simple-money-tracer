@@ -26,7 +26,7 @@ public class CategoryDAO {
         helper = application.getSQLiteOpenHelper();
     }
 
-    public boolean insertCategory(Category objCategory) {
+    public long insertCategory(Category objCategory) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         // Set category data for adding
@@ -34,14 +34,14 @@ public class CategoryDAO {
         cv.put(CATEGORY_NAME, objCategory.getName());
 
         // Save category data
-        long result = db.insert(CATEGORY_TABLE_NAME, null, cv);
-        if (result == -1)
+        long newId = db.insert(CATEGORY_TABLE_NAME, null, cv);
+        if (newId > 0)
         {
-            return false;
+            return newId;
         }
         else
         {
-            return true;
+            return -1;
         }
     }
 
