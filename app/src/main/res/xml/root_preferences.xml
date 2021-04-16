@@ -24,12 +24,13 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/title_appearance">
-        <SwitchPreference
-            app:key="setDarkOn"
-            app:summaryOff="@string/dark_off"
-            app:summaryOn="@string/dark_on"
-            app:title="@string/set_dark_theme"  />
+    <PreferenceCategory app:title="@string/unit_price">
+        <EditTextPreference
+            app:key="unitPrice"
+            app:singleLineTitle="true"
+            app:title="@string/unit_price"
+            app:defaultValue="$"
+            app:useSimpleSummaryProvider="true"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

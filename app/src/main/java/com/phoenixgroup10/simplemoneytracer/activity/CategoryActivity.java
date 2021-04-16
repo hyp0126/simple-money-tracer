@@ -42,8 +42,7 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        themeID = Common.getThemeId(this, "category");
-        setTheme(themeID);
+        setTheme(R.style.Theme_SimpleMoneyTracer);
         super.onCreate(savedInstanceState);
         application = ((SimpleMoneyTracerApplication) getApplication());
         categoryDAO= new CategoryDAO(application);
@@ -58,18 +57,7 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            if(themeID == R.style.Category_darkTheme) {
-                actionBar.setBackgroundDrawable(new ColorDrawable((Color.parseColor("#636161"))));
-                categoryAdd.setBackgroundColor(Color.parseColor("#dadada"));
-                categoryAdd.setTextColor(Color.parseColor("#000000"));
-                categoryUpdate.setBackgroundColor(Color.parseColor("#dadada"));
-                categoryUpdate.setTextColor(Color.parseColor("#000000"));
-                categoryCancel.setBackgroundColor(Color.parseColor("#dadada"));
-                categoryCancel.setTextColor(Color.parseColor("#000000"));
-            }
-            else {
-                actionBar.setBackgroundDrawable(new ColorDrawable((Color.parseColor("#001d3d"))));
-            }
+            actionBar.setBackgroundDrawable(new ColorDrawable((Color.parseColor("#001d3d"))));
         }
         categoryListView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);

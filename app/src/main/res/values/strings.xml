@@ -14,6 +14,7 @@
     <!-- Preference Titles -->
     <string name="title_notification">Notification</string>
     <string name="title_appearance">Appearance</string>
+    <string name="unit_price">Unit Price</string>
 
     <!-- Messages Preferences -->
     <string name="notification_midday">AM / PM</string>
@@ -21,7 +22,7 @@
     <string name="target_expense">Target Expense </string>
     <string name="set_dark_theme">Dark theme</string>
     <string name="title_target">Target Expense</string>
-    <string name="target_amount">Target expense per day(CAD$)</string>
+    <string name="target_amount">Target expense per month</string>
     <string name="reply_title">Default reply action</string>
 
     <string name="dark_on">Dark theme on</string>

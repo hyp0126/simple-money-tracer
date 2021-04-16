@@ -15,7 +15,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(Common.getThemeId(this, "setting"));
+        setTheme(R.style.Theme_SimpleMoneyTracer);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
         if (savedInstanceState == null) {

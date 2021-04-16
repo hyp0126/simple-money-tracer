@@ -43,11 +43,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         view = inflater.from(parent.getContext()).inflate(R.layout.activity_category_record, parent, false);
 
         CategoryViewHolder cvViewHolder = new CategoryViewHolder(view);
-
-        int themeID = Common.getThemeId(this.context, "category");
-        if(themeID == R.style.Category_darkTheme) {
-            cvViewHolder.itemName.setTextColor(Color.parseColor("#C3C3C0"));
-        }
         return cvViewHolder;
     }
     @Override
