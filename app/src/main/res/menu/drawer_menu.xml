@@ -3,14 +3,18 @@
 
     <item
         android:id="@+id/menuActivity"
+        android:icon="?attr/actionModeCopyDrawable"
         android:title="@string/activity" />
     <item
         android:id="@+id/menuReport"
+        android:icon="?attr/actionModePasteDrawable"
         android:title="@string/report" />
     <item
         android:id="@+id/menuCategory"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
         android:title="@string/category" />
     <item
         android:id="@+id/menuSettings"
+        android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/settings" />
 </menu>
