@@ -1,5 +1,6 @@
 package com.phoenixgroup10.simplemoneytracer.fragment;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -48,7 +49,6 @@ public class ReportFragment extends Fragment {
     private ArrayList dailyList;
     private ArrayList date;
     private SharedPreferences sharedPref;
-    private boolean darkState;
 
     private ActivityDAO activityDAO;
 
@@ -64,19 +64,13 @@ public class ReportFragment extends Fragment {
         PreferenceManager.setDefaultValues(getContext(), R.xml.root_preferences, false);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        darkState = sharedPref.getBoolean("setDarkOn", false);
-        if(darkState)
-            getActivity().setTheme((R.style.darkTheme));
-        else
-            getActivity().setTheme(R.style.Theme_SimpleMoneyTracer);
-
         View v = inflater.inflate(R.layout.fragment_report, container, false);
 
         startDate = (EditText)v.findViewById(R.id.editStartDate);
         endDate = (EditText)v.findViewById(R.id.editEndDate);
 
         btnDaily = (Button)v.findViewById(R.id.btnDaily);
-      //  btnMonthly = (Button)v.findViewById(R.id.btnMonthly);
+
         Calendar cal = Calendar.getInstance();
         sDate = cal.getTime();
         eDate = cal.getTime();
@@ -86,6 +80,7 @@ public class ReportFragment extends Fragment {
         activityDAO = new ActivityDAO((SimpleMoneyTracerApplication) getActivity().getApplication());
 
         startDate.setInputType(InputType.TYPE_NULL);
+
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,49 +140,8 @@ public class ReportFragment extends Fragment {
                     dataTransfer();
                 }
             }
-
-
         });
-/*
-        btnMonthly.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                if (sDate == null || eDate == null) {
-                    Toast.makeText(getContext(), "Date is required", Toast.LENGTH_SHORT).show();
-                } else {
-                    Cursor cursor = activityDAO.getCategorySum(sDate.getTime(), eDate.getTime());
-
-                    ArrayList categoryList = new ArrayList();
-                    ArrayList category = new ArrayList();
-                    if(cursor.getCount() > 0){
-                        if(cursor.moveToFirst()){
-                            int i = 0;
-                            do{
-                                category.add(cursor.getString(0));
-                                categoryList.add(new BarEntry(cursor.getFloat(1), i));
-                                i++;
-                            }while (cursor.moveToNext());
-                        }
-                    }
-
-                    cursor = activityDAO.getDailySum(sDate.getTime(), eDate.getTime());
-
-                    ArrayList dailyList = new ArrayList();
-                    ArrayList date = new ArrayList();
-                    if(cursor.getCount() > 0){
-                        if(cursor.moveToFirst()){
-                            int i = 0;
-                            do{
-                                date.add(new Date(cursor.getLong(0)));
-                                dailyList.add(new BarEntry(cursor.getFloat(1), i));
-                                i++;
-                            }while (cursor.moveToNext());
-                        }
-                    }
-                }
-            }
-        });*/
         return v;
     }
 
@@ -199,15 +153,12 @@ public class ReportFragment extends Fragment {
         ed.putLong("eDate", eDate.getTime());
         ed.commit();
 
-        //dataTransfer();
         super.onPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        darkState = sharedPref.getBoolean("setDarkOn", false);
 
         if (sDate != null && eDate != null){
             sDate = new Date(sharedPref.getLong("sDate",0));
