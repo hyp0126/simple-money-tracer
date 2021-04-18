@@ -121,6 +121,7 @@ public class AddActivityFragment extends Fragment {
         mEdtDate.setInputType(InputType.TYPE_NULL);
         Calendar cal = Calendar.getInstance();
         mEdtDate.setText(FormatUtils.getDateString(cal.getTime()));
+        mDate = cal.getTime();
         mEdtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
