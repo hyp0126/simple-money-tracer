@@ -48,6 +48,7 @@ public class AddActivityFragment extends Fragment {
     private List<Integer> categoryListId = new ArrayList<Integer>();
 
     private FrameLayout fLayout;
+
     // Declare UI instance variables
     private EditText mEdtAmount;
     private DatePickerDialog mDatePicker;
@@ -193,6 +194,7 @@ public class AddActivityFragment extends Fragment {
                 cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
                 Date eDate = cal.getTime();
                 double monthlyAmount = activityDAO.getSumWithDates(sDate, eDate);
+                monthlyAmount = -monthlyAmount; // -: expense, +: income
                 double targetExpense = Double.MAX_VALUE;
                 try {
                     targetExpense = Double.parseDouble(sharedPref.getString("targetExpense", "0"));

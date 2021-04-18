@@ -68,8 +68,8 @@ public class NotificationService extends Service {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, notiHour);
         calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
         calendar.add(Calendar.DATE, 1); // tomorrow
-        //calendar.add(Calendar.DATE, -1); // for test
 
         ed.putLong("notificationDateTime", calendar.getTime().getTime());
         ed.commit();
@@ -78,20 +78,25 @@ public class NotificationService extends Service {
             @Override
             public void run() {
                 reservationDateTime = new Date(sharedPref.getLong("notificationDateTime", 0));
-                Date currentDateTime = Calendar.getInstance().getTime();
-                if (currentDateTime.getTime() > reservationDateTime.getTime() ) {
-                    manager.notify(1, notification);
 
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(reservationDateTime);
-                    c.add(Calendar.DATE, 1);
-
-                    SharedPreferences.Editor ed = sharedPref.edit();
-                    ed.putLong("notificationDateTime", c.getTime().getTime());
-                    ed.commit();
+                if (reservationDateTime.getTime() == 0) {
+                    timer.cancel();
+                    stopSelf();
                 }
-                //timer.cancel();
-                //stopSelf();
+                else {
+                    Date currentDateTime = Calendar.getInstance().getTime();
+                    if (currentDateTime.getTime() >= reservationDateTime.getTime() ) {
+                        manager.notify(1, notification);
+
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(reservationDateTime);
+                        c.add(Calendar.DATE, 1);
+
+                        SharedPreferences.Editor ed = sharedPref.edit();
+                        ed.putLong("notificationDateTime", c.getTime().getTime());
+                        ed.commit();
+                    }
+                }
             }
         },1000, 10000);
 

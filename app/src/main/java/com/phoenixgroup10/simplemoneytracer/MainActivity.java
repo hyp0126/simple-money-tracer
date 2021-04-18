@@ -22,11 +22,15 @@ import com.phoenixgroup10.simplemoneytracer.fragment.AddActivityFragment;
 import com.phoenixgroup10.simplemoneytracer.fragment.ReportFragment;
 import com.phoenixgroup10.simplemoneytracer.service.NotificationService;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity {
+
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private boolean activeReportFragment;
-    private Intent mServiceIntent = null;
+    static private Intent mServiceIntent = null;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         mToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SetNavigationDrawer();
+
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         setFragment(new ActivityFragment());
     }
@@ -120,8 +126,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        mServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
-        startService(mServiceIntent);
+        if (mServiceIntent == null) {
+            mServiceIntent = new Intent(getApplicationContext(), NotificationService.class);
+            startService(mServiceIntent);
+        }
         super.onStop();
     }
 
@@ -129,6 +137,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         // If notification service is active, turn off
         if (mServiceIntent != null) {
+            // Set Notification Timer off (set 0)
+            SharedPreferences.Editor ed = sharedPref.edit();
+            ed.putLong("notificationDateTime", 0);
+            ed.commit();
+
             stopService(mServiceIntent);
             mServiceIntent = null;
         }
