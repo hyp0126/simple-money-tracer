@@ -97,7 +97,7 @@ public class ReportFragment extends Fragment {
                         Calendar calendar = Calendar.getInstance();;
                         startDate.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
 
-                        calendar.set(year, month, dayOfMonth);
+                        calendar.set(year, month, dayOfMonth,00,00,00);
                         sDate = calendar.getTime();
                     }
                 }, currentYear, currentMonth, currentDay);
@@ -122,7 +122,7 @@ public class ReportFragment extends Fragment {
                         Calendar calendar = Calendar.getInstance();;
                         endDate.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
 
-                        calendar.set(year, month, dayOfMonth);
+                        calendar.set(year, month, dayOfMonth,23,59,59);
                         eDate = calendar.getTime();
                     }
                 }, currentYear, currentMonth, currentDay);
