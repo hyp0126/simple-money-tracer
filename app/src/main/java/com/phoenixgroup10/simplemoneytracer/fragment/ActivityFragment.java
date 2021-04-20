@@ -142,7 +142,7 @@ public class ActivityFragment extends Fragment {
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(year, month, dayOfMonth);
                         mEndDate = calendar.getTime();
-                        mEdtStartDate.setText(FormatUtils.getDateString(mEndDate));
+                        mEdtEndDate.setText(FormatUtils.getDateString(mEndDate));
                         getActivities();
                         mAdapter.notifyDataSetChanged();
                     }
