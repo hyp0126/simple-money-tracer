@@ -96,7 +96,11 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
             }
             break;
             case R.id.btn_update: {
-                if(isDuplicatedName(newName)){
+                if(newName.trim().isEmpty()){
+                    Snackbar.make(view, "Can not update", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(application, "Blank category name!", Toast.LENGTH_SHORT).show();
+                }
+                else if(isDuplicatedName(newName)){
                     Snackbar.make(view, "Can not update", Snackbar.LENGTH_LONG).show();
                     Toast.makeText(application, "Duplicated category name!", Toast.LENGTH_SHORT).show();
                 }
