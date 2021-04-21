@@ -21,6 +21,11 @@ public class ActivityDAO {
     public static final String ACTIVITY_COL3 = "category_id";
     public static final String ACTIVITY_COL4 = "date";
 
+
+    public static final int INCOME_ONLY = 2;
+    public static final int EXPENSE_ONLY = 1;
+    public static final int ALL = 0;
+
     public static final String CREATE_ACTIVITY_TABLE = "CREATE TABLE " + ACTIVITY_TABLE_NAME + " ( "
             + ACTIVITY_COL1 + " INTEGER PRIMARY KEY AUTOINCREMENT, "   + ACTIVITY_COL2 + " REAL, "
             + ACTIVITY_COL3 + " INTEGER, " + ACTIVITY_COL4 + " INTEGER);";
@@ -149,7 +154,7 @@ public class ActivityDAO {
         return cursor;
     }
 
-    public Double getSumWithDates(Date startDate, Date endDate)
+    public Double getSumWithDates(Date startDate, Date endDate, int sumType)
     {
         //only use date
         Calendar calendar = Calendar.getInstance();
@@ -169,8 +174,22 @@ public class ActivityDAO {
 
         long startEpochDate = startDate.getTime();
         long endEpochDate = endDate.getTime();
-        String whereString = "WHERE " + ACTIVITY_COL4 + " >= " + startEpochDate + " AND "
-                + ACTIVITY_COL4 + " <= " + endEpochDate;
+
+        String whereString;
+        if (sumType == INCOME_ONLY) { //income
+            whereString = "WHERE " + ACTIVITY_COL4 + " >= " + startEpochDate + " AND "
+                    + ACTIVITY_COL4 + " <= " + endEpochDate + " AND "
+                    + ACTIVITY_COL2 + " >= 0"; //only income
+        }
+        else if (sumType == EXPENSE_ONLY) {  // expense
+            whereString = "WHERE " + ACTIVITY_COL4 + " >= " + startEpochDate + " AND "
+                    + ACTIVITY_COL4 + " <= " + endEpochDate + " AND "
+                    + ACTIVITY_COL2 + " < 0"; //only expense
+        }
+        else {  // all
+            whereString = "WHERE " + ACTIVITY_COL4 + " >= " + startEpochDate + " AND "
+                    + ACTIVITY_COL4 + " <= " + endEpochDate;
+        }
 
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor;

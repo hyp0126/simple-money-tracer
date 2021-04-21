@@ -193,7 +193,7 @@ public class AddActivityFragment extends Fragment {
                 Date sDate = cal.getTime();
                 cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
                 Date eDate = cal.getTime();
-                double monthlyAmount = activityDAO.getSumWithDates(sDate, eDate);
+                double monthlyAmount = activityDAO.getSumWithDates(sDate, eDate, ActivityDAO.EXPENSE_ONLY);
                 monthlyAmount = -monthlyAmount; // -: expense, +: income
                 double targetExpense = Double.MAX_VALUE;
                 try {
@@ -204,7 +204,7 @@ public class AddActivityFragment extends Fragment {
                 }
 
                 if (monthlyAmount > targetExpense) {
-                    Snackbar.make(fLayout,"Over the monthly target expense " + targetExpense, Snackbar.LENGTH_INDEFINITE)
+                    Snackbar.make(fLayout,"Over the monthly target expense " + FormatUtils.getCurrencyString(getContext(), targetExpense), Snackbar.LENGTH_INDEFINITE)
                             .setAction("OK", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -232,11 +232,11 @@ public class AddActivityFragment extends Fragment {
                 // Toast message for user (success or not)
                 if (insertStat == true)
                 {
-                    Snackbar.make(fLayout,"Activity added/updated successfully", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(fLayout,"Activity deleted successfully", Snackbar.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    Snackbar.make(fLayout,"Activity not added/updated", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(fLayout,"Activity not deleted", Snackbar.LENGTH_SHORT).show();
                 }
 
                 Fragment frag = new ActivityFragment();

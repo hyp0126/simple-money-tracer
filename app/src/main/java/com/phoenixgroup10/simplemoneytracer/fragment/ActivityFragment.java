@@ -2,11 +2,13 @@ package com.phoenixgroup10.simplemoneytracer.fragment;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,6 +45,7 @@ public class ActivityFragment extends Fragment {
     FloatingActionButton mFabAdd;
     private EditText mEdtStartDate;
     private EditText mEdtEndDate;
+    private TextView mTxtBalance;
 
     // Recycler View variables
     private RecyclerView mRecyclerView;
@@ -55,6 +59,9 @@ public class ActivityFragment extends Fragment {
     // Member variables
     private Date mStartDate;
     private Date mEndDate;
+    private double mBalance;
+
+    private SharedPreferences sharedPref;
 
     public ActivityFragment() {
         // Required empty public constructor
@@ -66,10 +73,13 @@ public class ActivityFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_activity, container, false);
 
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+
         mRecyclerView = (RecyclerView)v.findViewById(R.id.recyclerViewActivities);
         mFabAdd = v.findViewById(R.id.fabAdd);
         mEdtStartDate = (EditText)v.findViewById(R.id.edtStartDate);
         mEdtEndDate = (EditText)v.findViewById(R.id.edtEndDate);
+        mTxtBalance = (TextView)v.findViewById(R.id.txtBalance);
 
         activityDAO = new ActivityDAO((SimpleMoneyTracerApplication) getActivity().getApplication());
 
@@ -79,6 +89,18 @@ public class ActivityFragment extends Fragment {
         cal.add(Calendar.DAY_OF_MONTH, -30);
         mStartDate = cal.getTime();
         mEdtStartDate.setText(FormatUtils.getDateString(mStartDate));
+
+        // Check previous end date
+        Date endDate = new Date(sharedPref.getLong("endDate", 0));
+        if (mEndDate.getTime() < endDate.getTime()){
+            mStartDate = new Date(sharedPref.getLong("startDate",0));
+            mEndDate = new Date(sharedPref.getLong("endDate", 0));
+            mEdtStartDate.setText(FormatUtils.getDateString(mStartDate));
+            mEdtEndDate.setText(FormatUtils.getDateString(mEndDate));
+        }
+
+        // set balance
+        getBalance();
 
         // Get activities list
         getActivities();
@@ -116,6 +138,7 @@ public class ActivityFragment extends Fragment {
                         calendar.set(year, month, dayOfMonth);
                         mStartDate = calendar.getTime();
                         mEdtStartDate.setText(FormatUtils.getDateString(mStartDate));
+                        getBalance();
                         getActivities();
                         mAdapter.notifyDataSetChanged();
                     }
@@ -143,6 +166,7 @@ public class ActivityFragment extends Fragment {
                         calendar.set(year, month, dayOfMonth);
                         mEndDate = calendar.getTime();
                         mEdtEndDate.setText(FormatUtils.getDateString(mEndDate));
+                        getBalance();
                         getActivities();
                         mAdapter.notifyDataSetChanged();
                     }
@@ -198,6 +222,12 @@ public class ActivityFragment extends Fragment {
         });
     }
 
+    private void getBalance()
+    {
+        mBalance = activityDAO.getSumWithDates(mStartDate, mEndDate, ActivityDAO.ALL);
+        mTxtBalance.setText(FormatUtils.getCurrencyString(getContext(), mBalance));
+    }
+
     /**
      * This method for binding an adapter for RecyclerView
      */
@@ -243,12 +273,23 @@ public class ActivityFragment extends Fragment {
     }
 
     /**
-     * OnRestart State: Re-Binding Recycler View Adapter
+     * onResume State: Re-Binding Recycler View Adapter
      */
     @Override
     public void onResume() {
         // Re-Bind Recycler View Adapter because it is removed onStop()
         bindAdapter();
         super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        // save start / end date
+        SharedPreferences.Editor ed = sharedPref.edit();
+        ed.putLong("startDate", mStartDate.getTime());
+        ed.putLong("endDate", mEndDate.getTime());
+        ed.commit();
+
+        super.onPause();
     }
 }
