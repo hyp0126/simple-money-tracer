@@ -45,6 +45,7 @@
     <string name="amount">Amount</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="default_currency">$</string>
 
 <!--    category-->
     <string name="add_new_category">Add a new cateory</string>

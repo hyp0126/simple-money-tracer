@@ -7,6 +7,7 @@
             app:entryValues="@array/time_values"
             app:key="notiTime"
             app:title="@string/notification_time"
+            app:defaultValue="10"
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
@@ -14,12 +15,14 @@
             app:entryValues="@array/midday_values"
             app:key="timeMidday"
             app:title="@string/notification_midday"
+            app:defaultValue="2"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             app:key="targetExpense"
             app:singleLineTitle="true"
             app:title="@string/target_amount"
+            app:defaultValue="1000"
             app:useSimpleSummaryProvider="true"/>
 
     </PreferenceCategory>
@@ -29,7 +32,7 @@
             app:key="currency"
             app:singleLineTitle="true"
             app:title="@string/currency"
-            app:defaultValue="$"
+            app:defaultValue="@string/default_currency"
             app:useSimpleSummaryProvider="true"/>
     </PreferenceCategory>
 

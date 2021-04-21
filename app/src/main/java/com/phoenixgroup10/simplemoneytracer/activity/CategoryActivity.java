@@ -84,8 +84,9 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
         String newName = etEnterName.getText().toString();
         switch (view.getId()) {
             case R.id.btn_add: {
-                if(newName.equals("")){
-                    Snackbar.make(view, "Category Name is Required", Snackbar.LENGTH_LONG).show();
+                if(newName.trim().equals("")){
+                    Snackbar.make(view, "Can not be added", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(application, "Category Name is Required!", Toast.LENGTH_SHORT).show();
                     etEnterName.setFocusable(true);
                 } else if (isDuplicatedName(newName)) {
                     Snackbar.make(view, "Can not be added", Snackbar.LENGTH_LONG).show();
@@ -97,11 +98,11 @@ public class CategoryActivity extends AppCompatActivity  implements View.OnClick
             break;
             case R.id.btn_update: {
                 if(newName.trim().isEmpty()){
-                    Snackbar.make(view, "Can not update", Snackbar.LENGTH_LONG).show();
-                    Toast.makeText(application, "Blank category name!", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(view, "Can not be updated", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(application, "Category Name is Required!", Toast.LENGTH_SHORT).show();
                 }
                 else if(isDuplicatedName(newName)){
-                    Snackbar.make(view, "Can not update", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(view, "Can not be updated", Snackbar.LENGTH_LONG).show();
                     Toast.makeText(application, "Duplicated category name!", Toast.LENGTH_SHORT).show();
                 }
                 else{
