@@ -197,7 +197,7 @@ public class AddActivityFragment extends Fragment {
                 monthlyAmount = -monthlyAmount; // -: expense, +: income
                 double targetExpense = Double.MAX_VALUE;
                 try {
-                    targetExpense = Double.parseDouble(sharedPref.getString("targetExpense", "0"));
+                    targetExpense = Double.parseDouble(sharedPref.getString("targetExpense", String.valueOf(Double.MAX_VALUE)));
                 }
                 catch (Exception ex) {
                     //parse error
