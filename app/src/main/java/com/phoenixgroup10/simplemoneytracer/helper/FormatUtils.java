@@ -30,6 +30,6 @@ public class FormatUtils {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String currencyUnit = sharedPref.getString("currency", "$");
 
-        return currencyUnit + String.valueOf(currency);
+        return currencyUnit + String.format("%.2f", currency);
     }
 }
