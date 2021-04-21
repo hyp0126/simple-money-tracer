@@ -302,6 +302,9 @@ public class AddActivityFragment extends Fragment {
             categoryDAO.insertCategory(category);
             category = new Category(0, "Food");
             categoryDAO.insertCategory(category);
+
+            // Get cursor for getting a list
+            cursor = categoryDAO.getCategories("");
         }
 
         if (cursor.moveToFirst()) {
