@@ -83,6 +83,7 @@ public class AddActivityFragment extends Fragment {
         // Set UI instance variables
         mEdtAmount = (EditText)v.findViewById(R.id.edtAmount);
         mEdtAmount.setFilters(new InputFilter[] {new CurrencyFormatInputFilter()});
+        mEdtAmount.setText("0");
 
         mEdtDate = (EditText)v.findViewById(R.id.edtDate);
 
@@ -152,8 +153,19 @@ public class AddActivityFragment extends Fragment {
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                double amount;
+                try {
+                    amount = Double.parseDouble(mEdtAmount.getText().toString());
+                    if (amount == 0) {
+                        Snackbar.make(fLayout,"Enter the Amount more than zero", Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                catch (Exception ex) {
+                    Snackbar.make(fLayout,"Enter the correct Amount", Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
 
-                double amount = Double.parseDouble(mEdtAmount.getText().toString());
                 if (!mChkIncome.isChecked()) {
                     amount = -amount;
                 }

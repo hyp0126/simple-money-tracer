@@ -110,7 +110,7 @@
                 android:layout_marginStart="8sp"
                 android:layout_marginEnd="8sp"
                 android:layout_weight="2"
-                android:text="@string/income"
+                android:text="@string/income_plus"
                 android:textSize="18sp" />
         </LinearLayout>
 

@@ -51,4 +51,5 @@
     <string name="add_new_category">Add a new cateory</string>
     <string name="update_category">Update</string>
     <string name="cancel_category">Cancel</string>
+    <string name="income_plus">Income (+)</string>
 </resources>
